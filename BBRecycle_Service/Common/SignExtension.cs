@@ -24,7 +24,6 @@ namespace BBRecycle_Service.Common
             {
                 result.Append(c.ToString("X2"));
             }
-
             return result.ToString().ToUpper() == signature;
         }
     }

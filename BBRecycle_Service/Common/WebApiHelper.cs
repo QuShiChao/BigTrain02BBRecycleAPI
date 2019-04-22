@@ -98,7 +98,6 @@ namespace BBRecycle_Service.Common
         }
 
 
-
         /// <summary>
         /// 获取token
         /// </summary>

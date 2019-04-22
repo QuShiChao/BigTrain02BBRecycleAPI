@@ -25,7 +25,6 @@ namespace BBRecycle_Service.Entity
                 {
                     return JsonConvert.DeserializeObject<Product>(Data.ToString());
                 }
-
                 return null;
             }
         }

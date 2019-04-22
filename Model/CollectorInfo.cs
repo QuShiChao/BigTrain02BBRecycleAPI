@@ -15,6 +15,7 @@ namespace Model
         public string CID { get; set; }
         public string Cname { get; set; }
         public string Cpwd { get; set; }
+        public string Clocation { get; set; }
         public string Cimage { get; set; }
     }
 }

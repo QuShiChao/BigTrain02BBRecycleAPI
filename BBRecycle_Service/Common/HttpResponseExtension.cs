@@ -16,7 +16,6 @@ namespace BBRecycle_Service.Common
             }
             else
             {
-
                 str = JsonConvert.SerializeObject(obj);
             }
             HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };

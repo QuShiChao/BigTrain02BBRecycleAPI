@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using BBRecycle_Service.Controllers;
 
 namespace BBRecycle_Service
 {
@@ -13,6 +14,7 @@ namespace BBRecycle_Service
 
             // Web API 路由
             config.MapHttpAttributeRoutes();
+            config.Filters.Add(new ApiSecretFilter());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

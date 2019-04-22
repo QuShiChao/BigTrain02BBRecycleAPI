@@ -9,7 +9,7 @@ using System.Data;
 
 namespace DAL
 {
-    public class ReflectHelper<T> where T:new()
+    public class ReflectHelper<T> where T : new()
     {
         //添加语句
         public static string GetAddStr(T t)
@@ -20,7 +20,10 @@ namespace DAL
             string sql = "";
             foreach (var item in type.GetProperties())
             {
-                sb.Append("'").Append(item.GetValue(t)+"',");
+                if (item.GetCustomAttribute(typeof(KeyAttribute), true) == null)
+                {
+                    sb.Append("'").Append(item.GetValue(t) + "',");
+                }
             }
             sql = sb.ToString().Substring(0, sb.ToString().Length - 1) + ")";
             return sql;
@@ -56,7 +59,7 @@ namespace DAL
             {
                 if (item.GetCustomAttribute(typeof(KeyAttribute), true) != null)
                 {
-                    sql += item.Name + "=" +id;
+                    sql += item.Name + "=" + id;
                 }
             }
             return sql;
@@ -65,18 +68,21 @@ namespace DAL
         public static string GetUpdStr(T t)
         {
             Type type = typeof(T);
-            string sql = "update " + type.Name+" set ";
+            string sql = "update " + type.Name + " set ";
             StringBuilder sb1 = new StringBuilder();
             StringBuilder sb2 = new StringBuilder();
             foreach (var item in type.GetProperties())
             {
                 if (item.GetCustomAttribute(typeof(KeyAttribute), true) != null)
                 {
-                    sb1.Append("where "+ item.Name + "='" + item.GetValue(t) + "'");
+                    sb1.Append("where " + item.Name + "='" + item.GetValue(t) + "'");
                 }
                 else
                 {
-                    sb2.Append(item.Name + "='" + item.GetValue(t) + "',");
+                    if (item.GetValue(t)!=null || Convert.ToInt32(item.GetValue(t)) != 0)
+                    { 
+                        sb2.Append(item.Name + "='" + item.GetValue(t) + "',");
+                    }
                 }
             }
             sql += sb2.ToString().Substring(0, sb2.ToString().Length - 1) + sb1.ToString();

@@ -18,7 +18,8 @@ namespace Model
         public string Utel { get; set; }
         public string Uimage { get; set; }
         public string Uaddr { get; set; }
-        public double Udealmoney { get; set; }
+        public int Unum { get; set; }
+        public decimal Udealmoney { get; set; }
         public string Ubankcard { get; set; }
         public string UalipayCode { get; set; }
         public string UwechatCode { get; set; }

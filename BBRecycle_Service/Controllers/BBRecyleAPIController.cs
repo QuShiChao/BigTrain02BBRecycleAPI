@@ -10,6 +10,8 @@ using Model;
 using Newtonsoft.Json;
 using System.Text;
 using DAL;
+using BBRecycle_Service.Models;
+using BBRecycle_Service.Common;
 
 namespace BBRecycle_Service.Controllers
 {
@@ -25,9 +27,24 @@ namespace BBRecycle_Service.Controllers
         }
         //获取管理员集合
         [HttpGet]
-        public List<AdminInfo> GetAdmin()
+        public HttpResponseMessage GetAdmin()
         {
-            return GetBll<AdminInfo>.createDal().Get();
+            string key = "admin";
+            //读库存缓存
+            var db = RedisHelper.GetRedisDB();
+            if (!db.KeyExists(key))
+            {
+                string json = JsonConvert.SerializeObject(GetBll<AdminInfo>.createDal().Get());
+                RedisHelper.SetString(key, json);
+            }
+            string result = RedisHelper.GetString(key);
+            ResultMsg resultMsg = null;
+            resultMsg = new ResultMsg();
+            resultMsg.StatusCode = (int)StatusCodeEnum.Success;
+            resultMsg.Info = StatusCodeEnum.Success.GetEnumText();
+            resultMsg.Data = result;
+            HttpResponseMessage obj = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(resultMsg), Encoding.UTF8, "text/json") };
+            return obj;
         }
         //删除管理员集合
         [HttpDelete]
@@ -44,43 +61,77 @@ namespace BBRecycle_Service.Controllers
         #endregion
         #region 用户操作
         //添加用户
+        [HttpPost]
         public int AddUser(UserInfo user)
         {
             return GetBll<UserInfo>.createDal().Add(user);
         }
         //获取用户信息
-        public List<UserInfo> GetUser()
+        [HttpGet]
+        public HttpResponseMessage GetUser()
         {
-            return GetBll<UserInfo>.createDal().Get();
+            string key = "user";
+            //读库存缓存
+            var db = RedisHelper.GetRedisDB();
+            if (!db.KeyExists(key))
+            {
+                string json = JsonConvert.SerializeObject(GetBll<UserInfo>.createDal().Get());
+                RedisHelper.SetString(key, json);
+            }
+            string result = RedisHelper.GetString(key);
+            ResultMsg resultMsg = null;
+            resultMsg = new ResultMsg();
+            resultMsg.StatusCode = (int)StatusCodeEnum.Success;
+            resultMsg.Info = StatusCodeEnum.Success.GetEnumText();
+            resultMsg.Data = result;
+            HttpResponseMessage obj = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(resultMsg), Encoding.UTF8, "text/json") };
+            return obj;
         }
         //删除用户
+        [HttpDelete]
         public int DelUser(int id)
         {
             return GetBll<UserInfo>.createDal().Del(id);
         }
         //修改用户
+        [HttpPut]
         public int UpdUser(UserInfo user)
         {
             return GetBll<UserInfo>.createDal().Upd(user);
         }
         #endregion
         #region 回收员操作
-        //添加用户
+        //添加回收员
         public int AddCollector(CollectorInfo collector)
         {
             return GetBll<CollectorInfo>.createDal().Add(collector);
         }
-        //获取用户信息
-        public List<CollectorInfo> GetCollector()
+        //获取回收员信息
+        public HttpResponseMessage GetCollector()
         {
-            return GetBll<CollectorInfo>.createDal().Get();
+            string key = "collector";
+            //读库存缓存
+            var db = RedisHelper.GetRedisDB();
+            if (!db.KeyExists(key))
+            {
+                string json = JsonConvert.SerializeObject(GetBll<CollectorInfo>.createDal().Get());
+                RedisHelper.SetString(key, json);
+            }
+            string result = RedisHelper.GetString(key);
+            ResultMsg resultMsg = null;
+            resultMsg = new ResultMsg();
+            resultMsg.StatusCode = (int)StatusCodeEnum.Success;
+            resultMsg.Info = StatusCodeEnum.Success.GetEnumText();
+            resultMsg.Data = result;
+            HttpResponseMessage obj = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(resultMsg), Encoding.UTF8, "text/json") };
+            return obj;
         }
-        //删除用户
+        //删除回收员
         public int DelCollector(int id)
         {
             return GetBll<CollectorInfo>.createDal().Del(id);
         }
-        //修改用户
+        //修改回收员
         public int UpdCollector(CollectorInfo collector)
         {
             return GetBll<CollectorInfo>.createDal().Upd(collector);
@@ -93,9 +144,24 @@ namespace BBRecycle_Service.Controllers
             return GetBll<Category>.createDal().Add(category);
         }
         //获取类别信息
-        public List<Category> GetCategory()
+        public HttpResponseMessage GetCategory()
         {
-            return GetBll<Category>.createDal().Get();
+            string key = "cate";
+            //读库存缓存
+            var db = RedisHelper.GetRedisDB();
+            if (!db.KeyExists(key))
+            {
+                string json = JsonConvert.SerializeObject(GetBll<Category>.createDal().Get());
+                RedisHelper.SetString(key, json);
+            }
+            string result = RedisHelper.GetString(key);
+            ResultMsg resultMsg = null;
+            resultMsg = new ResultMsg();
+            resultMsg.StatusCode = (int)StatusCodeEnum.Success;
+            resultMsg.Info = StatusCodeEnum.Success.GetEnumText();
+            resultMsg.Data = result;
+            HttpResponseMessage obj = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(resultMsg), Encoding.UTF8, "text/json") };
+            return obj;
         }
         //删除类别
         public int DelCategory(int id)
@@ -117,8 +183,21 @@ namespace BBRecycle_Service.Controllers
         //获取物品信息
         public HttpResponseMessage GetRec()
         {
-            string json= JsonConvert.SerializeObject(SqlDbHelper.Get("p_GetRecyclesAndCate",null));
-            HttpResponseMessage obj =new HttpResponseMessage(HttpStatusCode.OK){Content=new StringContent(json,Encoding.UTF8,"text/json") };
+            string key = "recycle";
+            //读库存缓存
+            var db = RedisHelper.GetRedisDB();
+            if (!db.KeyExists(key))
+            {
+                string json = JsonConvert.SerializeObject(SqlDbHelper.Get("p_GetRecyclesAndCate", null));
+                RedisHelper.SetString(key, json);
+            }
+            string result = RedisHelper.GetString(key);
+            ResultMsg resultMsg = null;
+            resultMsg = new ResultMsg();
+            resultMsg.StatusCode = (int)StatusCodeEnum.Success;
+            resultMsg.Info = StatusCodeEnum.Success.GetEnumText();
+            resultMsg.Data = result;
+            HttpResponseMessage obj = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(resultMsg), Encoding.UTF8, "text/json") };
             return obj;
         }
         //删除物品
@@ -141,8 +220,21 @@ namespace BBRecycle_Service.Controllers
         //获取用户信息
         public HttpResponseMessage GetOrder()
         {
-            string json = JsonConvert.SerializeObject(SqlDbHelper.Get("p_GetOUCC", null));
-            HttpResponseMessage obj = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(json, Encoding.UTF8, "text/json") };
+            string key = "order";
+            //读库存缓存
+            var db = RedisHelper.GetRedisDB();
+            if (!db.KeyExists(key))
+            {
+                string json = JsonConvert.SerializeObject(SqlDbHelper.Get("p_GetOUCC", null));
+                RedisHelper.SetString(key, json);
+            }
+            string result = RedisHelper.GetString(key);
+            ResultMsg resultMsg = null;
+            resultMsg = new ResultMsg();
+            resultMsg.StatusCode = (int)StatusCodeEnum.Success;
+            resultMsg.Info = StatusCodeEnum.Success.GetEnumText();
+            resultMsg.Data = result;
+            HttpResponseMessage obj = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(resultMsg), Encoding.UTF8, "text/json") };
             return obj;
         }
         //删除用户
@@ -165,16 +257,29 @@ namespace BBRecycle_Service.Controllers
         //获取交易信息
         public HttpResponseMessage GetDeal()
         {
+            string key = "deal";
+            //读库存缓存
+            var db = RedisHelper.GetRedisDB();
+            if (!db.KeyExists(key))
+            {
                 string json = JsonConvert.SerializeObject(SqlDbHelper.Get("p_GetDOU", null));
-            HttpResponseMessage obj = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(json, Encoding.UTF8, "text/json") };
+                RedisHelper.SetString(key, json);
+            }
+            string result = RedisHelper.GetString(key);
+            ResultMsg resultMsg = null;
+            resultMsg = new ResultMsg();
+            resultMsg.StatusCode = (int)StatusCodeEnum.Success;
+            resultMsg.Info = StatusCodeEnum.Success.GetEnumText();
+            resultMsg.Data = result;
+            HttpResponseMessage obj = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(JsonConvert.SerializeObject(resultMsg), Encoding.UTF8, "text/json") };
             return obj;
         }
-        //删除用户
+        //删除交易信息
         public int DelDeal(int id)
         {
             return GetBll<DealRecord>.createDal().Del(id);
         }
-        //修改用户
+        //修改交易信息
         public int UpdDeal(DealRecord deal)
         {
             return GetBll<DealRecord>.createDal().Upd(deal);

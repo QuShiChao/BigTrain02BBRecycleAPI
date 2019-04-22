@@ -20,12 +20,16 @@ namespace BLL
         {
             string sql = ReflectHelper<T>.GetDelStr(id);
             return SqlDbHelper.ADU(sql);
-        }
+        }
+
+
         public List<T> Get()
         {
             string sql = ReflectHelper<T>.GetStr();
             return ReflectHelper<T>.GetList(SqlDbHelper.Get(sql));
-        }
+        }
+
+
         public int Upd(T t)
         {
             string sql = ReflectHelper<T>.GetUpdStr(t);

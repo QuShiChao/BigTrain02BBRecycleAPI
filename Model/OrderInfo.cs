@@ -13,11 +13,13 @@ namespace Model
         public string Oid { get; set; }
         public string Oname { get; set; }
         public int Cid { get; set; }
-        public int Onum { get; set; }
+        public string Onum { get; set; }
         public int Uid { get; set; }
         public int Collector_Id { get; set; }
         public int Owithdraw { get; set; }
-        public double Omoney { get; set; }
+        public decimal Omoney { get; set; }
+        public string Oaddr { get; set; }
+        public string Odesription { get; set; }
         public DateTime Otime { get; set; }
         public int Ostatus { get; set; }
     }
