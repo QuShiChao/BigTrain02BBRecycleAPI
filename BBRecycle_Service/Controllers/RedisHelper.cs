@@ -10,7 +10,7 @@ namespace BBRecycle_Service.Controllers
     public class RedisHelper
     {
         //配置对象
-        private static ConfigurationOptions configuration = ConfigurationOptions.Parse("127.0.0.1:6379");
+        private static ConfigurationOptions configuration = ConfigurationOptions.Parse("10.1.152.4:6379");
         private static ConnectionMultiplexer connection;
         private static readonly object Locker = new object();
         public static IDatabase GetRedisDB()
